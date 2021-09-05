@@ -23,7 +23,14 @@ void FovView::Start()
 		{
 			if ((*app::Controll__TypeInfo)->static_fields->csCam != nullptr)
 			{
-				app::Camera_set_fieldOfView((*app::Controll__TypeInfo)->static_fields->csCam, viewFov, nullptr);
+				if ((*app::Controll__TypeInfo)->static_fields->inZoom == true)
+				{
+					app::Camera_set_fieldOfView((*app::Controll__TypeInfo)->static_fields->csCam, 25, nullptr);
+				}
+				else
+				{
+					app::Camera_set_fieldOfView((*app::Controll__TypeInfo)->static_fields->csCam, viewFov, nullptr);
+				}				
 			}
 		}
 
