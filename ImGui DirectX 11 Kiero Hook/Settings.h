@@ -6,12 +6,12 @@ class USettings
 public:	
 	bool DrawWatermark = true;
 	float  Dinstace = 250;
-	bool Wallhack = true;
+	bool Wallhack = false;
 	float fov = 2.8;
-	bool AimActive = true;
-	bool AimKeyActive = true;
-	bool TeamCheck = true;
-	bool FreeCam = true;
+	bool AimActive = false;
+	bool AimKeyActive = false;
+	bool TeamCheck = false;
+	bool FreeCam = false;
 	bool Crash = false;
 	bool Tracer = false;
 	bool Discord = false;
@@ -26,6 +26,7 @@ public:
 	bool AntiCrash = false;
 	bool Skelet = false;
 	bool MaxScoup = false;
+	bool DestroyWatter = false;
 	float fovCam = 0;
 };
 

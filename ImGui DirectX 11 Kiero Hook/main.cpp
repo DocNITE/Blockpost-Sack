@@ -47,6 +47,7 @@ static const char* Croshairs[8]{ "DEFOLT", "WITH A DOT","DOT","WITHOUT LINE UP",
 static const char* GameEvent[3]{ "NONE","WINTER", "HALLOWEEN" };
 static const char* Figure[4]{ "Circle", "Rect","RectFilled","Rect (Regular)" };
 static const char* cfg[3]{ config1, config2,config3 };
+float colorSkyLight[4] = { 0.450f, 0.450f, 0.450f,0.1f };
 static int selectedMode = 0;
 static int selectiedCfg = 0;
 float viewfovs = 65;
@@ -143,6 +144,8 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 			ImGui::Checkbox("Skelet (DONT WORK WITH ANTICRASH!)", &Settings.Skelet);
 			ImGui::ColorEdit3("ColorSkelet", skelet.colorSkelet);
 			ImGui::ColorEdit3("ColorSkeletSpawnProtect", skelet.colorSkeletS);
+			ImGui::ColorEdit3("SkyLight (Direction Light)", colorSkyLight);
+			ImGui::SliderFloat("Fov", &fovview.viewFov, 0, 360);
 
 
 		}
@@ -154,8 +157,8 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 			ImGui::Checkbox("FackeDuck  ", &Settings.Duck);
 			ImGui::Checkbox("SpeedBoost  ", &Settings.SpeedBoost);
 			ImGui::Checkbox("NoFreez  ", &Settings.NoFreez);
-			ImGui::Checkbox("NoReload ", &Settings.NoReload);
-			ImGui::SliderFloat("Fov", &fovview.viewFov,0,360);
+			ImGui::Checkbox("NoReload ", &Settings.NoReload);	
+			ImGui::Checkbox("Destroy Watter", &Settings.DestroyWatter);
 			ImGui::ListBox("CrossHair", &cros.selectItemDa, Croshairs, 8, 2);
 			ImGui::ListBox("GameEvent", &selectedMode, GameEvent, 3, 3);
 		
@@ -220,6 +223,7 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 
 DWORD WINAPI FreeCamThread(HMODULE hMod)
 {
+
 	FreeCam freecam;
 	offsetsM offsets;
 	app::Controll__StaticFields* da = (*app::Controll__TypeInfo)->static_fields; // saksak 
@@ -227,10 +231,13 @@ DWORD WINAPI FreeCamThread(HMODULE hMod)
 	
 	while (true)
 	{	
+		
 		fovview.Start();
 		cros.Render();
 		tracer.LineSize = Settings.LineSize;
-		(*app::Crosshair__TypeInfo)->static_fields->crosshair_attack = 0;				
+		(*app::Crosshair__TypeInfo)->static_fields->crosshair_attack = 0;		
+		
+		
 		if (selectedMode == 0)
 		{
 			main->winter = 0;
@@ -297,17 +304,27 @@ DWORD WINAPI FreeCamThread(HMODULE hMod)
 	FreeLibraryAndExitThread(hMod, 0);
 }
 DWORD WINAPI FunctTread(HMODULE hMod)
-{	
+{
+
 	AutomaticW asdddd; 
 	DWORD OldProtection;
 	uintptr_t baseModule = reinterpret_cast<uintptr_t>(GetModuleHandle(TEXT("GameAssembly.dll")));
 	asdddd.Render();
-		
+
+
 	while (true)
 	{			
 		aim.fov = 2+atan(aim.dist) * Settings.fov;
 		aim.distanceFov = Settings.Dinstace;
-		
+		if (Settings.DestroyWatter)
+		{
+			if ((*app::Map__TypeInfo)->static_fields->goMapWater != nullptr)
+			{
+				app::Object_1_Destroy_1((app::Object_1*)(*app::Map__TypeInfo)->static_fields->goMapWater, nullptr);
+				Settings.DestroyWatter = false;
+			}
+			
+		}
 		if (Settings.AimActive)		
 			aim.Render();
 		
@@ -357,6 +374,14 @@ DWORD WINAPI ConfigThread(HMODULE hMod)
 	
 	while (true)
 	{
+
+			//app::Material_set_shader((*app::Controll__TypeInfo)->static_fields->pl->fields.matWaterSplash, 0, nullptr);
+			//app::RenderSettings_set_skybox((*app::Controll__TypeInfo)->static_fields->pl->fields.matWaterSplash, nullptr);
+				
+			app::RenderSettings_set_ambientSkyColor(app::Color{ colorSkyLight[0], colorSkyLight[1], colorSkyLight[2],colorSkyLight[3] }, nullptr);
+			
+		
+		
 		
 		
 		if (Settings.saveconfig)

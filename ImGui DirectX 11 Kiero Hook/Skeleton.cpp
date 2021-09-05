@@ -12,12 +12,12 @@
 app::PlayerData* GetPlayerDataS(UINT32 i)
 {
 
-    offsetsM offsets;
-    PlayerDataArray* pdataA = (PlayerDataArray*)(*app::PLH__TypeInfo)->static_fields->player;
-    DWORD CHECK = (DWORD)pdataA->Player[i];
-    if (CHECK < 0xfffff || CHECK == NULL || &CHECK  == nullptr)
-        return NULL;
-    return pdataA->Player[i];
+	offsetsM offsets;
+	PlayerDataArray* pdataA = (PlayerDataArray*)(*app::PLH__TypeInfo)->static_fields->player;
+	DWORD CHECK = (DWORD)pdataA->Player[i];
+	if (CHECK < 0xfffff || CHECK == NULL || &CHECK == nullptr)
+		return NULL;
+	return pdataA->Player[i];
 
 }
 
@@ -29,7 +29,7 @@ VectorSkelet Skeleton::GetBones(int i)
 	ImVec2 posInScreenTrue3;
 	ImVec2 posInScreenTrue4;
 	ImVec2 posInScreenTrue5;
-	ImVec2 posInScreenTrue6; 
+	ImVec2 posInScreenTrue6;
 	ImVec2 posInScreenTrue7;
 	ImVec2 posInScreenTrue8;
 	ImVec2 posInScreenTrue9;
@@ -81,8 +81,8 @@ VectorSkelet Skeleton::GetBones(int i)
 	if (&enemy->fields.currweapon == nullptr)
 		return{ -1,-1,-1 };
 
-	
-		
+
+
 	if (app::Camera_WorldToScreenPoint((*app::Controll__TypeInfo)->static_fields->csCam, app::Transform_get_position(app::GameObject_get_transform(enemy->fields.go, nullptr), nullptr), app::Camera_MonoOrStereoscopicEye__Enum::Mono, nullptr).z <= 1.0f)
 		return{ -1,-1,-1 };
 	if (app::Camera_WorldToScreenPoint((*app::Controll__TypeInfo)->static_fields->csCam, app::Transform_get_position(app::GameObject_get_transform(enemy->fields.goBody, nullptr), nullptr), app::Camera_MonoOrStereoscopicEye__Enum::Mono, nullptr).z <= 1.0f)
@@ -122,7 +122,7 @@ VectorSkelet Skeleton::GetBones(int i)
 			return { -1, -1,-1 };/// vec 07
 		}
 	}
-	
+
 	posInScreenTrue1.x = app::Camera_WorldToScreenPoint((*app::Controll__TypeInfo)->static_fields->csCam, app::Transform_get_position(app::GameObject_get_transform(enemy->fields.go, nullptr), nullptr), app::Camera_MonoOrStereoscopicEye__Enum::Mono, nullptr).x;
 	posInScreenTrue1.y = app::Screen_get_height(nullptr) - app::Camera_WorldToScreenPoint((*app::Controll__TypeInfo)->static_fields->csCam, app::Transform_get_position(app::GameObject_get_transform(enemy->fields.go, nullptr), nullptr), app::Camera_MonoOrStereoscopicEye__Enum::Mono, nullptr).y;
 	posInScreenTrue2.x = app::Camera_WorldToScreenPoint((*app::Controll__TypeInfo)->static_fields->csCam, app::Transform_get_position(app::GameObject_get_transform(enemy->fields.goBody, nullptr), nullptr), app::Camera_MonoOrStereoscopicEye__Enum::Mono, nullptr).x;
@@ -155,67 +155,65 @@ VectorSkelet Skeleton::GetBones(int i)
 
 	if (enemy->fields.spawnprotect)
 	{
-		return { posInScreenTrue1.x,posInScreenTrue1.y,posInScreenTrue2.x,posInScreenTrue2.y,posInScreenTrue3.x,posInScreenTrue3.y,posInScreenTrue4.x,posInScreenTrue4.y,posInScreenTrue6.x ,posInScreenTrue6.y,posInScreenTrue7.x ,posInScreenTrue7.y ,posInScreenTrue8.x ,posInScreenTrue8.y,posInScreenTrue9.x ,posInScreenTrue9.y,posInScreenTrue10.x ,posInScreenTrue10.y ,posInScreenTrue11.x ,posInScreenTrue11.y ,posInScreenTrue12.x ,posInScreenTrue12.y,posInScreenTrue13.x ,posInScreenTrue13.y,posInScreenTrue14.x ,posInScreenTrue14.y,posInScreenTrue15.x ,posInScreenTrue15.y ,3};/// vec 07
+		return { posInScreenTrue1.x,posInScreenTrue1.y,posInScreenTrue2.x,posInScreenTrue2.y,posInScreenTrue3.x,posInScreenTrue3.y,posInScreenTrue4.x,posInScreenTrue4.y,posInScreenTrue6.x ,posInScreenTrue6.y,posInScreenTrue7.x ,posInScreenTrue7.y ,posInScreenTrue8.x ,posInScreenTrue8.y,posInScreenTrue9.x ,posInScreenTrue9.y,posInScreenTrue10.x ,posInScreenTrue10.y ,posInScreenTrue11.x ,posInScreenTrue11.y ,posInScreenTrue12.x ,posInScreenTrue12.y,posInScreenTrue13.x ,posInScreenTrue13.y,posInScreenTrue14.x ,posInScreenTrue14.y,posInScreenTrue15.x ,posInScreenTrue15.y ,3 };/// vec 07
 	}
-	
+
 	return { posInScreenTrue1.x,posInScreenTrue1.y,posInScreenTrue2.x,posInScreenTrue2.y,posInScreenTrue3.x,posInScreenTrue3.y,posInScreenTrue4.x,posInScreenTrue4.y,posInScreenTrue6.x ,posInScreenTrue6.y,posInScreenTrue7.x ,posInScreenTrue7.y ,posInScreenTrue8.x ,posInScreenTrue8.y,posInScreenTrue9.x ,posInScreenTrue9.y,posInScreenTrue10.x ,posInScreenTrue10.y ,posInScreenTrue11.x ,posInScreenTrue11.y ,posInScreenTrue12.x ,posInScreenTrue12.y,posInScreenTrue13.x ,posInScreenTrue13.y,posInScreenTrue14.x ,posInScreenTrue14.y,posInScreenTrue15.x ,posInScreenTrue15.y ,0 };
 
 }
 void Skeleton::Render()
 {
-	
-		for (int i = 0; i < 40; i++)
+
+	for (int i = 0; i < 40; i++)
+	{
+		offsetsM offsets;
+		uintptr_t baseModule = reinterpret_cast<uintptr_t>(GetModuleHandle(TEXT("GameAssembly.dll")));
+		app::PlayerData* enemy = GetPlayerDataS(i); // saksak 
+		if (offsets.GetPointerAddress(baseModule + EntListBase2, { 0x5C,0x0C, 0x10 + (UINT)i * 4,  0x28 }) != reinterpret_cast<uintptr_t>(GetModuleHandle(TEXT("GameAssembly.dll"))) + EntListBase2)
 		{
-			offsetsM offsets;
-			uintptr_t baseModule = reinterpret_cast<uintptr_t>(GetModuleHandle(TEXT("GameAssembly.dll")));
-			app::PlayerData* enemy = GetPlayerDataS(i); // saksak 
-			if (offsets.GetPointerAddress(baseModule + EntListBase2, { 0x5C,0x0C, 0x10 + (UINT)i * 4,  0x28 }) != reinterpret_cast<uintptr_t>(GetModuleHandle(TEXT("GameAssembly.dll"))) + EntListBase2)
+			if (enemy->fields.health >= 1)
 			{
-				if (enemy->fields.health >= 1)
+				if (enemy->fields.bstate != 5)
 				{
-					if (enemy->fields.bstate != 5)
+					app::String* asdz = (enemy->fields.name);
+					WallHackNamess* chars = (WallHackNamess*)asdz;
+
+					char aaa[16] = { chars->Pname[0], chars->Pname[2],chars->Pname[4], chars->Pname[6], chars->Pname[8] ,chars->Pname[10], chars->Pname[12], chars->Pname[14],chars->Pname[16], chars->Pname[18],chars->Pname[20], chars->Pname[22], chars->Pname[24], chars->Pname[26], chars->Pname[28], chars->Pname[30] };
+					VectorSkelet da = GetBones(i);
+					if (da.Status == 0)
 					{
-						app::String* asdz = (enemy->fields.name);
-						WallHackNamess* chars = (WallHackNamess*)asdz;
-
-						char aaa[16] = { chars->Pname[0], chars->Pname[2],chars->Pname[4], chars->Pname[6], chars->Pname[8] ,chars->Pname[10], chars->Pname[12], chars->Pname[14],chars->Pname[16], chars->Pname[18],chars->Pname[20], chars->Pname[22], chars->Pname[24], chars->Pname[26], chars->Pname[28], chars->Pname[30] };
-						VectorSkelet da = GetBones(i);
-						if (da.Status == 0)
-						{
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xH,da.yH }, { da.xAH,da.yAH }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xAH,da.yAH }, { da.xB,da.yB }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xAH,da.yAH }, { da.xLA1,da.yLA1 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xLA1,da.yLA1 }, { da.xLA2,da.yLA2 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xAH,da.yAH }, { da.xRA3,da.yRA3 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xRA3,da.yRA3 }, { da.xRA2,da.yRA2 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xB,da.yB }, { da.xLl1,da.yLL1 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xB,da.yB }, { da.xRl1,da.yRL1 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xLl1,da.yLL1 }, { da.xLl2,da.yLL2 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xRl1,da.yRL1 }, { da.xRl2,da.yRL2 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xRl2,da.yRL2 }, { da.xRl3,da.yRL3 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xLl2,da.yLL2 }, { da.xLl3,da.yLL3 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddText({ da.xH - 30,da.yH - 20 }, ImColor{ 255, 255, 222, 255 }, aaa);
-						}
-						if (da.Status == 3)
-						{
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xH,da.yH }, { da.xAH,da.yAH }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xAH,da.yAH }, { da.xB,da.yB }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xAH,da.yAH }, { da.xLA1,da.yLA1 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xLA1,da.yLA1 }, { da.xLA2,da.yLA2 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xAH,da.yAH }, { da.xRA3,da.yRA3 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xRA3,da.yRA3 }, { da.xRA2,da.yRA2 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xB,da.yB }, { da.xLl1,da.yLL1 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xB,da.yB }, { da.xRl1,da.yRL1 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xLl1,da.yLL1 }, { da.xLl2,da.yLL2 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xRl1,da.yRL1 }, { da.xRl2,da.yRL2 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xRl2,da.yRL2 }, { da.xRl3,da.yRL3 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddLine({ da.xLl2,da.yLL2 }, { da.xLl3,da.yLL3 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
-							ImGui::GetBackgroundDrawList()->AddText({ da.xH - 30,da.yH - 20 }, ImColor{ 255, 255, 222, 255 }, aaa);
-						}
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xH,da.yH }, { da.xAH,da.yAH }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xAH,da.yAH }, { da.xB,da.yB }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xAH,da.yAH }, { da.xLA1,da.yLA1 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xLA1,da.yLA1 }, { da.xLA2,da.yLA2 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xAH,da.yAH }, { da.xRA3,da.yRA3 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xRA3,da.yRA3 }, { da.xRA2,da.yRA2 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xB,da.yB }, { da.xLl1,da.yLL1 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xB,da.yB }, { da.xRl1,da.yRL1 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xLl1,da.yLL1 }, { da.xLl2,da.yLL2 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xRl1,da.yRL1 }, { da.xRl2,da.yRL2 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xRl2,da.yRL2 }, { da.xRl3,da.yRL3 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xLl2,da.yLL2 }, { da.xLl3,da.yLL3 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddText({ da.xH - 30,da.yH - 20 }, ImColor{ 255, 255, 222, 255 }, aaa);
 					}
-				}		
-			}			
-		}	
+					if (da.Status == 3)
+					{
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xH,da.yH }, { da.xAH,da.yAH }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xAH,da.yAH }, { da.xB,da.yB }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xAH,da.yAH }, { da.xLA1,da.yLA1 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xLA1,da.yLA1 }, { da.xLA2,da.yLA2 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xAH,da.yAH }, { da.xRA3,da.yRA3 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xRA3,da.yRA3 }, { da.xRA2,da.yRA2 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xB,da.yB }, { da.xLl1,da.yLL1 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xB,da.yB }, { da.xRl1,da.yRL1 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xLl1,da.yLL1 }, { da.xLl2,da.yLL2 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xRl1,da.yRL1 }, { da.xRl2,da.yRL2 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xRl2,da.yRL2 }, { da.xRl3,da.yRL3 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddLine({ da.xLl2,da.yLL2 }, { da.xLl3,da.yLL3 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
+						ImGui::GetBackgroundDrawList()->AddText({ da.xH - 30,da.yH - 20 }, ImColor{ 255, 255, 222, 255 }, aaa);
+					}
+				}
+			}
+		}
+	}
 }
-
-
