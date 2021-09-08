@@ -15,10 +15,13 @@
 #include "Fov.h"
 #include <iostream>
 #include <string>
-
+#include "goThrowWall.h"
+#include "ChangeWeaponScale.h"
 #define WIN32_LEAN_AND_MEAN
 
 
+ChangeWeaponScale cwsS;
+goThrowWall goThrowWalls;
 FovView fovview;
 MaxScoup msc;
 Tracer tracer;
@@ -40,7 +43,7 @@ const char* config1 = "config1";
 const char* config2 = "config2";
 const char* config3 = "config3";
 static int tab = 3;
-static int tabb = 4;
+static int tabb = 5;
 bool init = false;
 bool DrawWatermark = true;
 static const char* Croshairs[8]{ "DEFOLT", "WITH A DOT","DOT","WITHOUT LINE UP","DA","2 LINE","SACK","STRENG DOT" };
@@ -51,6 +54,8 @@ float colorSkyLight[4] = { 0.450f, 0.450f, 0.450f,0.1f };
 static int selectedMode = 0;
 static int selectiedCfg = 0;
 float viewfovs = 65;
+float  scale = 1;
+
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 void InitImGui()
@@ -124,6 +129,9 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 		ImGui::SameLine(0.f, 2.f);
 		if (ImGui::Button((u8"CFG"), ImVec2(100.f, 0.f)))
 			tabb = 4;
+		ImGui::SameLine(0.f, 2.f);
+		if (ImGui::Button((u8"COLORS"), ImVec2(100.f, 0.f)))
+			tabb = 5;
 		if (tabb == 0) {
 			
 			ImGui::Checkbox("AimBot", &Settings.AimActive);
@@ -135,16 +143,10 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 		else if (tabb == 1) {
 			ImGui::Checkbox("WallHack", &Settings.Wallhack);
 			ImGui::Checkbox("TeamCheck", &Settings.TeamCheck);
-			ImGui::ColorEdit3("WallHackColor", wall.colorWh);
-			ImGui::ColorEdit3("WallHackColorInSpawnProtect", wall.colorWhS);
 			ImGui::Checkbox("Tracer", &Settings.Tracer);
-			ImGui::SliderFloat("LineSize", &Settings.LineSize, 0, 10);
-			ImGui::ColorEdit3("ColorTracer", tracer.colorTracer);
+			ImGui::SliderFloat("LineSize", &Settings.LineSize, 0, 10);		
 			ImGui::Combo("figure", &wall.selectiedFigure, Figure, 4);
 			ImGui::Checkbox("Skelet (DONT WORK WITH ANTICRASH!)", &Settings.Skelet);
-			ImGui::ColorEdit3("ColorSkelet", skelet.colorSkelet);
-			ImGui::ColorEdit3("ColorSkeletSpawnProtect", skelet.colorSkeletS);
-			ImGui::ColorEdit3("SkyLight (Direction Light)", colorSkyLight);
 			ImGui::SliderFloat("Fov", &fovview.viewFov, 0, 360);
 
 
@@ -152,13 +154,17 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 		else if (tabb == 2) {
 			ImGui::Checkbox("AllWeaponMaxScoup", &Settings.MaxScoup);
 			ImGui::Checkbox("AntiCrash", &Settings.AntiCrash);
+			ImGui::Checkbox("Big Man", &Settings.BigMan);
 			ImGui::Checkbox("Crash  (BUTTON 4)", &Settings.Crash);
+			ImGui::Checkbox("Destroy Watter", &Settings.DestroyWatter);
 			ImGui::Checkbox("Freecam  ", &Settings.FreeCam);
 			ImGui::Checkbox("FackeDuck  ", &Settings.Duck);
-			ImGui::Checkbox("SpeedBoost  ", &Settings.SpeedBoost);
+			ImGui::Checkbox("GoThrowWall", &Settings.ThrowWall);
+			ImGui::SameLine(0.f, 2.f);
+			ImGui::SliderInt("TpTo", &goThrowWalls.tpTo, 0, 400);
 			ImGui::Checkbox("NoFreez  ", &Settings.NoFreez);
-			ImGui::Checkbox("NoReload ", &Settings.NoReload);	
-			ImGui::Checkbox("Destroy Watter", &Settings.DestroyWatter);
+			ImGui::Checkbox("NoReload ", &Settings.NoReload);
+			ImGui::Checkbox("SpeedBoost  ", &Settings.SpeedBoost);
 			ImGui::ListBox("CrossHair", &cros.selectItemDa, Croshairs, 8, 2);
 			ImGui::ListBox("GameEvent", &selectedMode, GameEvent, 3, 3);
 		
@@ -177,6 +183,15 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 			if (ImGui::Button("Load", ImVec2(100.f, 0.f)))
 				Settings.LoadConfig = true;
 			ImGui::SameLine(0.f, 2.f);
+		}
+		else if(tabb = 5)
+		{
+			ImGui::ColorEdit4("WallHackColor", wall.colorWh);
+			ImGui::ColorEdit4("WallHackColorInSpawnProtect", wall.colorWhS);
+			ImGui::ColorEdit4("ColorTracer", tracer.colorTracer);
+			ImGui::ColorEdit4("ColorSkelet", skelet.colorSkelet);
+			ImGui::ColorEdit4("ColorSkeletSpawnProtect", skelet.colorSkeletS);
+			ImGui::ColorEdit3("SkyLight (Direction Light)", colorSkyLight);
 		}
 
 		if (Settings.Wallhack)
@@ -228,16 +243,39 @@ DWORD WINAPI FreeCamThread(HMODULE hMod)
 	offsetsM offsets;
 	app::Controll__StaticFields* da = (*app::Controll__TypeInfo)->static_fields; // saksak 
 	app::Main__StaticFields* main = (*app::Main__TypeInfo)->static_fields;
-	
+
 	while (true)
 	{	
 		
-		fovview.Start();
+		
+		if (Settings.BigMan)
+		{
+			for (int i = 0; i < 40; i++)
+			{
+				cwsS.StartS(i, scale);
+				cwsS.active = true;
+			}
+		}
+		else
+		{
+			for (int i = 0; i < 40; i++)
+			{
+				cwsS.StartS(i, scale);
+				cwsS.active = false;
+			}
+
+		}
+		
 		cros.Render();
 		tracer.LineSize = Settings.LineSize;
 		(*app::Crosshair__TypeInfo)->static_fields->crosshair_attack = 0;		
 		
 		
+		if (Settings.changeweapon)
+		{
+			app::PLH_SetNormal((*app::Controll__TypeInfo)->static_fields->pl->fields.idx, nullptr);
+			Settings.changeweapon = false;
+		}
 		if (selectedMode == 0)
 		{
 			main->winter = 0;
@@ -310,24 +348,38 @@ DWORD WINAPI FunctTread(HMODULE hMod)
 	DWORD OldProtection;
 	uintptr_t baseModule = reinterpret_cast<uintptr_t>(GetModuleHandle(TEXT("GameAssembly.dll")));
 	asdddd.Render();
-
+	
 
 	while (true)
-	{			
+	{
+		
+		
+
 		aim.fov = 2+atan(aim.dist) * Settings.fov;
 		aim.distanceFov = Settings.Dinstace;
 		if (Settings.DestroyWatter)
 		{
 			if ((*app::Map__TypeInfo)->static_fields->goMapWater != nullptr)
 			{
+				
 				app::Object_1_Destroy_1((app::Object_1*)(*app::Map__TypeInfo)->static_fields->goMapWater, nullptr);
 				Settings.DestroyWatter = false;
 			}
 			
 		}
+
+		
+
+		int fpsmax = reinterpret_cast<int>(GetModuleHandle(TEXT("UnityPlayer.dll"))) + 0x105E60C;
+		if (*(int*)fpsmax > 201)
+		{
+			int* fpsmaxs = reinterpret_cast<int*>(fpsmax);
+			*fpsmaxs = 200;
+		}
 		if (Settings.AimActive)		
 			aim.Render();
 		
+
 		
 		if (Settings.AimKeyActive)
 			aim.toggle = true;
@@ -374,15 +426,10 @@ DWORD WINAPI ConfigThread(HMODULE hMod)
 	
 	while (true)
 	{
-
-			//app::Material_set_shader((*app::Controll__TypeInfo)->static_fields->pl->fields.matWaterSplash, 0, nullptr);
-			//app::RenderSettings_set_skybox((*app::Controll__TypeInfo)->static_fields->pl->fields.matWaterSplash, nullptr);
-				
-			app::RenderSettings_set_ambientSkyColor(app::Color{ colorSkyLight[0], colorSkyLight[1], colorSkyLight[2],colorSkyLight[3] }, nullptr);
-			
 		
 		
-		
+		fovview.Start();
+		app::RenderSettings_set_ambientSkyColor(app::Color{ colorSkyLight[0], colorSkyLight[1], colorSkyLight[2],colorSkyLight[3] }, nullptr);
 		
 		if (Settings.saveconfig)
 		{
@@ -444,6 +491,18 @@ DWORD WINAPI ConfigThread(HMODULE hMod)
 	FreeLibraryAndExitThread(hMod, 0);
 }
 
+DWORD WINAPI SackThread(HMODULE hMod)
+{
+	while (true)
+	{
+		if (Settings.ThrowWall || GetAsyncKeyState(0x5A) & 1)
+		{
+			goThrowWalls.Start();
+		}		
+		
+	}
+FreeLibraryAndExitThread(hMod, 0);
+}
 DWORD WINAPI MainThread(LPVOID lpReserved)
 {
 	bool init_hook = false;
@@ -470,6 +529,7 @@ BOOL WINAPI DllMain(HMODULE hMod, DWORD dwReason, LPVOID lpReserved)
 		StartThread(nullptr, (LPTHREAD_START_ROUTINE)FunctTread);
 		StartThread(nullptr, (LPTHREAD_START_ROUTINE)FreeCamThread);
 		StartThread(nullptr, (LPTHREAD_START_ROUTINE)ConfigThread);
+		StartThread(nullptr, (LPTHREAD_START_ROUTINE)SackThread);
 		break;
 	case DLL_PROCESS_DETACH:
 		kiero::shutdown();

@@ -91,41 +91,47 @@ void AimBot::Render()
                 
                 if (enemy->fields.bstate != 5)
                 {
-                    Vector2 AngletoTarger = GetDistanceAndAngle(mycam->camira->campos, enemy->fields.currPos);
-
-
-                    if (AngletoTarger.d <= distanceFov)
+                    if (enemy->fields.goHead != nullptr)
                     {
-                        
-                        dist = AngletoTarger.d;
-                        float x = controll->rx;
-                        float y = controll->ry;
-                        float normdis = AngletoTarger.x;
-                        float mysacky = controll->ry - normdis;
+                        app::Vector3 posEnemyBone = app::Transform_get_position(app::GameObject_get_transform(enemy->fields.goHead, nullptr), nullptr);  //Вызвано исключение по адресу 0x5FFECE15 (UnityPlayer.dll) в BLOCKPOST.exe: 0xC0000005: нарушение прав доступа при чтении по адресу 0x00000000.
+                        posEnemyBone = { posEnemyBone.x,posEnemyBone.y + 0.6f ,posEnemyBone.z };
+                        Vector2 AngletoTarger = GetDistanceAndAngle(mycam->camira->campos, posEnemyBone);
 
-                        if (AngletoTarger.y < 0)
+
+                        if (AngletoTarger.d <= distanceFov)
                         {
-                            AngletoTarger.y = 360 + AngletoTarger.y;
-                        }
-                        if (x < 0)
-                        {
-                            x = 360 + x;
-                        }
-                       float  mysackx = AngletoTarger.y - x;
+
+                            dist = AngletoTarger.d;
+                            float x = controll->rx;
+                            float y = controll->ry;
+                            float normdis = AngletoTarger.x;
+                            float mysacky = controll->ry - normdis;
+
+                            if (AngletoTarger.y < 0)
+                            {
+                                AngletoTarger.y = 360 + AngletoTarger.y;
+                            }
+                            if (x < 0)
+                            {
+                                x = 360 + x;
+                            }
+                            float  mysackx = AngletoTarger.y - x;
 
 
-                        if (mysackx < -fov || mysackx > fov || mysacky < -fov || mysacky > fov)
+                            if (mysackx < -fov || mysackx > fov || mysacky < -fov || mysacky > fov)
+                            {
+                                break;
+                            }
+                            else {
+                                SetView(AngletoTarger);
+                            }
+                        }
+                        else
                         {
                             break;
                         }
-                        else {                                                
-                                SetView(AngletoTarger);
-                        }
                     }
-                    else
-                    {
-                        break;
-                    }
+                    
                 }
             }
         }

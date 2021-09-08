@@ -175,10 +175,10 @@ void Skeleton::Render()
 			{
 				if (enemy->fields.bstate != 5)
 				{
-					app::String* asdz = (enemy->fields.name);
-					WallHackNamess* chars = (WallHackNamess*)asdz;
 
-					char aaa[16] = { chars->Pname[0], chars->Pname[2],chars->Pname[4], chars->Pname[6], chars->Pname[8] ,chars->Pname[10], chars->Pname[12], chars->Pname[14],chars->Pname[16], chars->Pname[18],chars->Pname[20], chars->Pname[22], chars->Pname[24], chars->Pname[26], chars->Pname[28], chars->Pname[30] };
+
+
+					
 					VectorSkelet da = GetBones(i);
 					if (da.Status == 0)
 					{
@@ -194,7 +194,7 @@ void Skeleton::Render()
 						ImGui::GetBackgroundDrawList()->AddLine({ da.xRl1,da.yRL1 }, { da.xRl2,da.yRL2 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
 						ImGui::GetBackgroundDrawList()->AddLine({ da.xRl2,da.yRL2 }, { da.xRl3,da.yRL3 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
 						ImGui::GetBackgroundDrawList()->AddLine({ da.xLl2,da.yLL2 }, { da.xLl3,da.yLL3 }, ImColor{ colorSkelet[0],colorSkelet[1],colorSkelet[2],colorSkelet[3] }, 2);
-						ImGui::GetBackgroundDrawList()->AddText({ da.xH - 30,da.yH - 20 }, ImColor{ 255, 255, 222, 255 }, aaa);
+						
 					}
 					if (da.Status == 3)
 					{
@@ -210,7 +210,7 @@ void Skeleton::Render()
 						ImGui::GetBackgroundDrawList()->AddLine({ da.xRl1,da.yRL1 }, { da.xRl2,da.yRL2 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
 						ImGui::GetBackgroundDrawList()->AddLine({ da.xRl2,da.yRL2 }, { da.xRl3,da.yRL3 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
 						ImGui::GetBackgroundDrawList()->AddLine({ da.xLl2,da.yLL2 }, { da.xLl3,da.yLL3 }, ImColor{ colorSkeletS[0],colorSkeletS[1],colorSkeletS[2],colorSkeletS[3] }, 2);
-						ImGui::GetBackgroundDrawList()->AddText({ da.xH - 30,da.yH - 20 }, ImColor{ 255, 255, 222, 255 }, aaa);
+				
 					}
 				}
 			}

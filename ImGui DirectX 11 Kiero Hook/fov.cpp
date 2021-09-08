@@ -19,20 +19,24 @@ void FovView::Start()
 	if (offsets.GetPointerAddress(reinterpret_cast<uintptr_t>(GetModuleHandle("GameAssembly.dll")) + 0xB35CA8, { 0x5C,0x0C, (UINT)0x10 + 0 * 4,  0x28 }) != reinterpret_cast<uintptr_t>(GetModuleHandle("GameAssembly.dll")) + 0xB35CA8)
 	{
 		app::PlayerData* enemy = GetPlayerDataSack(0);
-		if (enemy->fields.currweapon != nullptr)
+		if (enemy != nullptr)
 		{
-			if ((*app::Controll__TypeInfo)->static_fields->csCam != nullptr)
+			if (enemy->fields.currweapon != nullptr)
 			{
-				if ((*app::Controll__TypeInfo)->static_fields->inZoom == true)
+				if ((*app::Controll__TypeInfo)->static_fields->csCam != nullptr)
 				{
-					app::Camera_set_fieldOfView((*app::Controll__TypeInfo)->static_fields->csCam, 25, nullptr);
+					if ((*app::Controll__TypeInfo)->static_fields->inZoom == true)
+					{
+						app::Camera_set_fieldOfView((*app::Controll__TypeInfo)->static_fields->csCam, 25, nullptr);
+					}
+					else
+					{
+						app::Camera_set_fieldOfView((*app::Controll__TypeInfo)->static_fields->csCam, viewFov, nullptr);
+					}
 				}
-				else
-				{
-					app::Camera_set_fieldOfView((*app::Controll__TypeInfo)->static_fields->csCam, viewFov, nullptr);
-				}				
 			}
 		}
+		
 
 	}
 }

@@ -111,6 +111,12 @@
     <ClCompile Include="fov.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="goThrowWall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeWeaponScale.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="kiero\minhook\dll_resources\MinHook.rc">
@@ -242,6 +248,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Fov.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="goThrowWall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeWeaponScale.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

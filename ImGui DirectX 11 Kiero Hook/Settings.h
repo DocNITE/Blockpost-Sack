@@ -27,6 +27,10 @@ public:
 	bool Skelet = false;
 	bool MaxScoup = false;
 	bool DestroyWatter = false;
+	bool changeweapon = false;
+	bool ThrowWall = false;
+	bool BigMan = false;
 	float fovCam = 0;
+	bool Dmod = false;
 };
 

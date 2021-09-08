@@ -52,24 +52,25 @@ Vector2 Tracer::GetPlayerPos(int i)
 	}
 	if (enemy->fields.currweapon == nullptr)
 		return { -1,-1,-1 };
-	app::Material_set_color(enemy->fields.currweapon->fields.mat, app::Color{ 255,255,255,255 }, nullptr);
-	if (app::Camera_WorldToScreenPoint((*app::Controll__TypeInfo)->static_fields->csCam, enemy->fields.currPos, app::Camera_MonoOrStereoscopicEye__Enum::Mono, nullptr).z <= 1.0f)
-		return { -1, -1,-1 };/// vec 0
-	if (enemy->fields.bstate == 5)
-		return { -1,-1,-1 };
-	posInScreenTrue.y = app::Screen_get_height(nullptr) - app::Camera_WorldToScreenPoint((*app::Controll__TypeInfo)->static_fields->csCam, enemy->fields.currPos, app::Camera_MonoOrStereoscopicEye__Enum::Mono, nullptr).y;
 
-	if (enemy->fields.leg_limit == 46)
-		return { posInScreenTrue.x ,posInScreenTrue.y,44,chars->Pname };
-
-
-
-	if (enemy->fields.spawnprotect)
+	if (enemy != nullptr)
 	{
-		return { app::Camera_WorldToScreenPoint((*app::Controll__TypeInfo)->static_fields->csCam, enemy->fields.currPos, app::Camera_MonoOrStereoscopicEye__Enum::Mono, nullptr).x ,posInScreenTrue.y,3,chars->Pname };/// vec 07
+		if (app::Camera_WorldToScreenPoint((*app::Controll__TypeInfo)->static_fields->csCam, enemy->fields.currPos, app::Camera_MonoOrStereoscopicEye__Enum::Mono, nullptr).z <= 1.0f)
+			return { -1, -1,-1 };/// vec 0
+		if (enemy->fields.bstate == 5)
+			return { -1,-1,-1 };
+		posInScreenTrue.y = app::Screen_get_height(nullptr) - app::Camera_WorldToScreenPoint((*app::Controll__TypeInfo)->static_fields->csCam, enemy->fields.currPos, app::Camera_MonoOrStereoscopicEye__Enum::Mono, nullptr).y;
+
+		if (enemy->fields.leg_limit == 46)
+			return { posInScreenTrue.x ,posInScreenTrue.y,44,chars->Pname };
+
+
+
+		if (enemy->fields.spawnprotect)
+		{
+			return { app::Camera_WorldToScreenPoint((*app::Controll__TypeInfo)->static_fields->csCam, enemy->fields.currPos, app::Camera_MonoOrStereoscopicEye__Enum::Mono, nullptr).x ,posInScreenTrue.y,3,chars->Pname };/// vec 07
+		}
+		return { app::Camera_WorldToScreenPoint((*app::Controll__TypeInfo)->static_fields->csCam, enemy->fields.currPos, app::Camera_MonoOrStereoscopicEye__Enum::Mono, nullptr).x ,posInScreenTrue.y,0,chars->Pname };
 	}
-	return { app::Camera_WorldToScreenPoint((*app::Controll__TypeInfo)->static_fields->csCam, enemy->fields.currPos, app::Camera_MonoOrStereoscopicEye__Enum::Mono, nullptr).x ,posInScreenTrue.y,0,chars->Pname };
-
-
 
 }

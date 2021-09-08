@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AutomaticW.cpp" />
+    <ClCompile Include="ChangeWeaponScale.cpp" />
     <ClCompile Include="Crash.cpp" />
     <ClCompile Include="Cross.cpp" />
     <ClCompile Include="fov.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="framework\il2cpp-init.cpp" />
     <ClCompile Include="framework\pch-il2cpp.cpp" />
     <ClCompile Include="Freecam.cpp" />
+    <ClCompile Include="goThrowWall.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -189,6 +191,7 @@
   <ItemGroup>
     <ClInclude Include="Aim.h" />
     <ClInclude Include="AutomaticW.h" />
+    <ClInclude Include="ChangeWeaponScale.h" />
     <ClInclude Include="Crash.h" />
     <ClInclude Include="Cross.h" />
     <ClInclude Include="Fov.h" />
@@ -203,6 +206,7 @@
     <ClInclude Include="framework\il2cpp-appdata.h" />
     <ClInclude Include="framework\pch-il2cpp.h" />
     <ClInclude Include="Freecam.h" />
+    <ClInclude Include="goThrowWall.h" />
     <ClInclude Include="MaxScoup.h" />
     <ClInclude Include="PlayerDataArray.h" />
     <ClInclude Include="Skeleton.h" />
