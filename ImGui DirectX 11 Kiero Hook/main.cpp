@@ -152,46 +152,47 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 
 		}
 		else if (tabb == 2) {
-			ImGui::Checkbox("AllWeaponMaxScoup", &Settings.MaxScoup);
-			ImGui::Checkbox("AntiCrash", &Settings.AntiCrash);
-			ImGui::Checkbox("Big Man", &Settings.BigMan);
-			ImGui::Checkbox("Crash  (BUTTON 4)", &Settings.Crash);
-			ImGui::Checkbox("Destroy Watter", &Settings.DestroyWatter);
-			ImGui::Checkbox("Freecam  ", &Settings.FreeCam);
-			ImGui::Checkbox("FackeDuck  ", &Settings.Duck);
-			ImGui::Checkbox("GoThrowWall", &Settings.ThrowWall);
-			ImGui::SameLine(0.f, 2.f);
-			ImGui::SliderInt("TpTo", &goThrowWalls.tpTo, 0, 400);
-			ImGui::Checkbox("NoFreez  ", &Settings.NoFreez);
-			ImGui::Checkbox("NoReload ", &Settings.NoReload);
-			ImGui::Checkbox("SpeedBoost  ", &Settings.SpeedBoost);
-			ImGui::ListBox("CrossHair", &cros.selectItemDa, Croshairs, 8, 2);
-			ImGui::ListBox("GameEvent", &selectedMode, GameEvent, 3, 3);
-		
+		ImGui::Checkbox("ThirdenPerson", &Settings.Person);
+		ImGui::Checkbox("AllWeaponMaxScoup", &Settings.MaxScoup);
+		ImGui::Checkbox("AntiCrash", &Settings.AntiCrash);
+		ImGui::Checkbox("Big Man", &Settings.BigMan);
+		ImGui::Checkbox("Crash  (BUTTON 4)", &Settings.Crash);
+		ImGui::Checkbox("Destroy Watter", &Settings.DestroyWatter);
+		ImGui::Checkbox("Freecam  ", &Settings.FreeCam);
+		ImGui::Checkbox("FackeDuck  ", &Settings.Duck);
+		ImGui::Checkbox("GoThrowWall", &Settings.ThrowWall);
+		ImGui::SameLine(0.f, 2.f);
+		ImGui::SliderInt("TpTo", &goThrowWalls.tpTo, 0, 400);
+		ImGui::Checkbox("NoFreez  ", &Settings.NoFreez);
+		ImGui::Checkbox("NoReload ", &Settings.NoReload);
+		ImGui::Checkbox("SpeedBoost  ", &Settings.SpeedBoost);
+		ImGui::ListBox("CrossHair", &cros.selectItemDa, Croshairs, 8, 2);
+		ImGui::ListBox("GameEvent", &selectedMode, GameEvent, 3, 3);
+
 		}
 		else if (tabb == 3)
 		{
-			ImGui::Checkbox("Discord", &Settings.Discord);
-			ImGui::Checkbox("YouTube", &Settings.YouTube);
+		ImGui::Checkbox("Discord", &Settings.Discord);
+		ImGui::Checkbox("YouTube", &Settings.YouTube);
 		}
 		else if (tabb == 4)
 		{
-			ImGui::Combo("CFG", &selectiedCfg, cfg, 3);
-			if (ImGui::Button("Save", ImVec2(100.f, 0.f)))
-				Settings.saveconfig = true;
-			ImGui::SameLine(0.f, 2.f);
-			if (ImGui::Button("Load", ImVec2(100.f, 0.f)))
-				Settings.LoadConfig = true;
-			ImGui::SameLine(0.f, 2.f);
+		ImGui::Combo("CFG", &selectiedCfg, cfg, 3);
+		if (ImGui::Button("Save", ImVec2(100.f, 0.f)))
+			Settings.saveconfig = true;
+		ImGui::SameLine(0.f, 2.f);
+		if (ImGui::Button("Load", ImVec2(100.f, 0.f)))
+			Settings.LoadConfig = true;
+		ImGui::SameLine(0.f, 2.f);
 		}
-		else if(tabb = 5)
+		else if (tabb = 5)
 		{
-			ImGui::ColorEdit4("WallHackColor", wall.colorWh);
-			ImGui::ColorEdit4("WallHackColorInSpawnProtect", wall.colorWhS);
-			ImGui::ColorEdit4("ColorTracer", tracer.colorTracer);
-			ImGui::ColorEdit4("ColorSkelet", skelet.colorSkelet);
-			ImGui::ColorEdit4("ColorSkeletSpawnProtect", skelet.colorSkeletS);
-			ImGui::ColorEdit3("SkyLight (Direction Light)", colorSkyLight);
+		ImGui::ColorEdit4("WallHackColor", wall.colorWh);
+		ImGui::ColorEdit4("WallHackColorInSpawnProtect", wall.colorWhS);
+		ImGui::ColorEdit4("ColorTracer", tracer.colorTracer);
+		ImGui::ColorEdit4("ColorSkelet", skelet.colorSkelet);
+		ImGui::ColorEdit4("ColorSkeletSpawnProtect", skelet.colorSkeletS);
+		ImGui::ColorEdit3("SkyLight (Direction Light)", colorSkyLight);
 		}
 
 		if (Settings.Wallhack)
@@ -200,7 +201,7 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 			skelet.Render();
 		if (Settings.Tracer)
 			tracer.Render();
-	
+
 		static int bg_alpha = 160;
 		auto& drawlist = *ImGui::GetBackgroundDrawList();
 		drawlist.AddRectFilled({ 0, 0 }, ImVec2(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)), IM_COL32(0, 0, 0, bg_alpha));
@@ -211,20 +212,20 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 	}
 	else
 	{
-		ImGui::Begin("dasdas", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoCollapse |
-			ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar);
+	ImGui::Begin("dasdas", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoCollapse |
+		ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar);
 
 
-		if (Settings.Wallhack)
-			wall.Render();
-		if (Settings.Skelet)
-			skelet.Render();
-		if (Settings.Tracer)
-			tracer.Render();
+	if (Settings.Wallhack)
+		wall.Render();
+	if (Settings.Skelet)
+		skelet.Render();
+	if (Settings.Tracer)
+		tracer.Render();
 
 
-		ImGui::End();
-		ImGui::Render();
+	ImGui::End();
+	ImGui::Render();
 	}
 
 
@@ -245,8 +246,8 @@ DWORD WINAPI FreeCamThread(HMODULE hMod)
 	app::Main__StaticFields* main = (*app::Main__TypeInfo)->static_fields;
 
 	while (true)
-	{	
-		
+	{
+
 		
 		if (Settings.BigMan)
 		{
