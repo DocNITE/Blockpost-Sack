@@ -39,6 +39,7 @@ void SetView(Vector2 pos)
     app::Controll__StaticFields* controll = (*app::Controll__TypeInfo)->static_fields;
     controll->rx = pos.y;
     controll->ry = pos.x;
+   
 }
 
 app::PlayerData* GetsPlayerData(UINT32 i)

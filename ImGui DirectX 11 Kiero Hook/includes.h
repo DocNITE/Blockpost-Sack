@@ -1,5 +1,5 @@
 #pragma once
-#define KEYMENY VK_HOME
+#define KEYMENY VK_INSERT
 #define EntListBase 0xB35C3C
 #define EntListBase2 0xB35CA8
 

@@ -24,8 +24,7 @@ Vector2 WallHack::GetPlayerPos(int i)
 	if (offsets.GetPointerAddress(reinterpret_cast<uintptr_t>(GetModuleHandle("GameAssembly.dll")) + 0xB35CA8, { 0x5C,0x0C, (UINT)0x10 + i * 4,  0x28 }) == reinterpret_cast<uintptr_t>(GetModuleHandle("GameAssembly.dll")) + 0xB35CA8)
 		return { -1, -1,-1 };/// vec 0
 	app::PlayerData* enemy = GetPlayerData(i);
-	app::String* asdz = (enemy->fields.name);
-	WallHackNames* chars = (WallHackNames*)asdz;
+	WallHackNames* chars = (WallHackNames*)(enemy->fields.name);
 
 	if (teamcheck == true)
 	{

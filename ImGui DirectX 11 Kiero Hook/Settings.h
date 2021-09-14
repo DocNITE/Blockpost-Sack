@@ -32,6 +32,6 @@ public:
 	bool BigMan = false;
 	float fovCam = 0;
 	bool Dmod = false;
-	bool Person = false;
+	bool Bhop = false;
 };
 

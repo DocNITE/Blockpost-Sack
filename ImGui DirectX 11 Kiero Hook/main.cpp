@@ -17,9 +17,11 @@
 #include <string>
 #include "goThrowWall.h"
 #include "ChangeWeaponScale.h"
+#include "Bhop.h"
+#include "imgui/imgui_animated.h"
 #define WIN32_LEAN_AND_MEAN
 
-
+Bhop bhop;
 ChangeWeaponScale cwsS;
 goThrowWall goThrowWalls;
 FovView fovview;
@@ -38,7 +40,6 @@ ID3D11RenderTargetView* mainRenderTargetView;
 AimBot aim;
 WallHack wall;
 FreeCam freeca;
-bool show = true;
 const char* config1 = "config1";
 const char* config2 = "config2";
 const char* config3 = "config3";
@@ -55,7 +56,8 @@ static int selectedMode = 0;
 static int selectiedCfg = 0;
 float viewfovs = 65;
 float  scale = 1;
-
+bool show = true;
+bool toggle = false;
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 void InitImGui()
@@ -134,39 +136,39 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 			tabb = 5;
 		if (tabb == 0) {
 			
-			ImGui::Checkbox("AimBot", &Settings.AimActive);
-			ImGui::Checkbox("AimBotKey", &Settings.AimKeyActive);
-			ImGui::Checkbox("TeamCheck", &Settings.TeamCheck);
+			ImGui::Toggle("AimBot", &Settings.AimActive);
+			ImGui::Toggle("AimBotKey", &Settings.AimKeyActive);
+			ImGui::Toggle("TeamCheck", &Settings.TeamCheck);
 			ImGui::SliderFloat("Distance", &Settings.Dinstace, 1, 250);
 			ImGui::SliderFloat("AimFov", &Settings.fov, 2.8, 360);
 		}
 		else if (tabb == 1) {
-			ImGui::Checkbox("WallHack", &Settings.Wallhack);
-			ImGui::Checkbox("TeamCheck", &Settings.TeamCheck);
-			ImGui::Checkbox("Tracer", &Settings.Tracer);
+			ImGui::Toggle("WallHack", &Settings.Wallhack);
+			ImGui::Toggle("Skelet (DONT WORK WITH ANTICRASH!)", &Settings.Skelet);
+			ImGui::Toggle("TeamCheck", &Settings.TeamCheck);
+			ImGui::Toggle("Tracer", &Settings.Tracer);
 			ImGui::SliderFloat("LineSize", &Settings.LineSize, 0, 10);		
-			ImGui::Combo("figure", &wall.selectiedFigure, Figure, 4);
-			ImGui::Checkbox("Skelet (DONT WORK WITH ANTICRASH!)", &Settings.Skelet);
+			ImGui::Combo("figure", &wall.selectiedFigure, Figure, 4);			
 			ImGui::SliderFloat("Fov", &fovview.viewFov, 0, 360);
 
 
 		}
 		else if (tabb == 2) {
-		ImGui::Checkbox("ThirdenPerson", &Settings.Person);
-		ImGui::Checkbox("AllWeaponMaxScoup", &Settings.MaxScoup);
-		ImGui::Checkbox("AntiCrash", &Settings.AntiCrash);
-		ImGui::Checkbox("Big Man", &Settings.BigMan);
-		ImGui::Checkbox("Crash  (BUTTON 4)", &Settings.Crash);
-		ImGui::Checkbox("Destroy Watter", &Settings.DestroyWatter);
-		ImGui::Checkbox("Freecam  ", &Settings.FreeCam);
-		ImGui::Checkbox("FackeDuck  ", &Settings.Duck);
-		ImGui::Checkbox("GoThrowWall", &Settings.ThrowWall);
+		ImGui::Toggle("AllWeaponMaxScoup", &Settings.MaxScoup);
+		ImGui::Toggle("AntiCrash", &Settings.AntiCrash);
+		ImGui::Toggle("Big Man", &Settings.BigMan);
+		ImGui::Toggle("Bhop", &Settings.Bhop);
+		ImGui::Toggle("Crash  (BUTTON 4)", &Settings.Crash);
+		ImGui::Toggle("Destroy Watter", &Settings.DestroyWatter);
+		ImGui::Toggle("Freecam  ", &Settings.FreeCam);
+		ImGui::Toggle("FackeDuck  ", &Settings.Duck);
+		ImGui::Toggle("GoThrowWall", &Settings.ThrowWall);
 		ImGui::SameLine(0.f, 2.f);
 		ImGui::SliderInt("TpTo", &goThrowWalls.tpTo, 0, 400);
-		ImGui::Checkbox("NoFreez  ", &Settings.NoFreez);
-		ImGui::Checkbox("NoReload ", &Settings.NoReload);
-		ImGui::Checkbox("SpeedBoost  ", &Settings.SpeedBoost);
-		ImGui::ListBox("CrossHair", &cros.selectItemDa, Croshairs, 8, 2);
+		ImGui::Toggle("NoFreez  ", &Settings.NoFreez);
+		ImGui::Toggle("NoReload ", &Settings.NoReload);
+		ImGui::Toggle("SpeedBoost  ", &Settings.SpeedBoost);
+		ImGui::ListBox("CrossHair", &cros.selectItemDa, Croshairs, 8, 2); 
 		ImGui::ListBox("GameEvent", &selectedMode, GameEvent, 3, 3);
 
 		}
@@ -239,16 +241,22 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 
 DWORD WINAPI FreeCamThread(HMODULE hMod)
 {
-
 	FreeCam freecam;
 	offsetsM offsets;
 	app::Controll__StaticFields* da = (*app::Controll__TypeInfo)->static_fields; // saksak 
 	app::Main__StaticFields* main = (*app::Main__TypeInfo)->static_fields;
+	
+	offsets.nopBytes(reinterpret_cast<uintptr_t>(GetModuleHandle("GameAssembly.dll"))+0x2D9B16,7); // insert crash bypass
 
 	while (true)
 	{
-
-		
+		cros.Render();
+		tracer.LineSize = Settings.LineSize;
+		(*app::Crosshair__TypeInfo)->static_fields->crosshair_attack = 0;
+		if (Settings.Bhop)
+		{
+			bhop.Start();
+		}
 		if (Settings.BigMan)
 		{
 			for (int i = 0; i < 40; i++)
@@ -265,18 +273,7 @@ DWORD WINAPI FreeCamThread(HMODULE hMod)
 				cwsS.active = false;
 			}
 
-		}
-		
-		cros.Render();
-		tracer.LineSize = Settings.LineSize;
-		(*app::Crosshair__TypeInfo)->static_fields->crosshair_attack = 0;		
-		
-		
-		if (Settings.changeweapon)
-		{
-			app::PLH_SetNormal((*app::Controll__TypeInfo)->static_fields->pl->fields.idx, nullptr);
-			Settings.changeweapon = false;
-		}
+		}				
 		if (selectedMode == 0)
 		{
 			main->winter = 0;
@@ -423,8 +420,11 @@ DWORD WINAPI FunctTread(HMODULE hMod)
 
 DWORD WINAPI ConfigThread(HMODULE hMod)
 {
-	
-	
+	app::GUIProfile__StaticFields* profile = (*app::GUIProfile__TypeInfo)->static_fields;
+	app::GUIOptions__StaticFields* options = (*app::GUIOptions__TypeInfo)->static_fields;
+	options->level = 0;
+
+
 	while (true)
 	{
 		

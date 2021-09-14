@@ -117,6 +117,12 @@
     <ClCompile Include="ChangeWeaponScale.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Bhop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_animated.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="kiero\minhook\dll_resources\MinHook.rc">
@@ -254,6 +260,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ChangeWeaponScale.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bhop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_animated.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

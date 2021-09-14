@@ -83,6 +83,7 @@ struct ImGuiContext;                // Main Dear ImGui context
 struct ImGuiDataTypeInfo;           // Type information associated to a ImGuiDataType enum
 struct ImGuiGroupData;              // Stacked storage data for BeginGroup()/EndGroup()
 struct ImGuiInputTextState;         // Internal state of the currently focused/edited text input box
+struct ImGuiLastItemData;           // Status storage for last submitted items
 struct ImGuiItemHoveredDataBackup;  // Backup and restore IsItemHovered() internal data
 struct ImGuiMenuColumns;            // Simple column measurement, currently used for MenuItem() only
 struct ImGuiNavMoveResult;          // Result of a directional navigation move query result
@@ -922,7 +923,17 @@ enum ImGuiNextItemDataFlags_
     ImGuiNextItemDataFlags_HasWidth = 1 << 0,
     ImGuiNextItemDataFlags_HasOpen  = 1 << 1
 };
+struct ImGuiLastItemData
+{
+    ImGuiID                 ID;
+    ImGuiItemFlags          InFlags;            // See ImGuiItemFlags_
+    ImGuiItemStatusFlags    StatusFlags;        // See ImGuiItemStatusFlags_
+    ImRect                  Rect;               // Full rectangle
+    ImRect                  NavRect;            // Navigation scoring rectangle (not displayed)
+    ImRect                  DisplayRect;        // Display rectangle (only if ImGuiItemStatusFlags_HasDisplayRect is set)
 
+    ImGuiLastItemData() { memset(this, 0, sizeof(*this)); }
+};
 struct ImGuiNextItemData
 {
     ImGuiNextItemDataFlags      Flags;
@@ -933,7 +944,11 @@ struct ImGuiNextItemData
     ImGuiNextItemData()         { memset(this, 0, sizeof(*this)); }
     inline void ClearFlags()    { Flags = ImGuiNextItemDataFlags_None; }
 };
-
+struct ImGuiWindowStackData
+{
+    ImGuiWindow* Window;
+    ImGuiLastItemData       ParentLastItemDataBackup;
+};
 //-----------------------------------------------------------------------------
 // Tabs
 //-----------------------------------------------------------------------------
@@ -1020,6 +1035,7 @@ struct ImGuiContext
     // Next window/item data
     ImGuiNextWindowData     NextWindowData;                     // Storage for SetNextWindow** functions
     ImGuiNextItemData       NextItemData;                       // Storage for SetNextItem** functions
+    ImGuiLastItemData       LastItemData;                       // Storage for last submitted item (setup by ItemAdd)
 
     // Shared stacks
     ImVector<ImGuiColorMod> ColorModifiers;                     // Stack for PushStyleColor()/PopStyleColor()
@@ -1112,6 +1128,7 @@ struct ImGuiContext
     // Widget state
     ImVec2                  LastValidMousePos;
     ImGuiInputTextState     InputTextState;
+    struct ImGuiLastItemData;           // Status storage for last submitted items
     ImFont                  InputTextPasswordFont;
     ImGuiID                 TempInputTextId;                    // Temporary text input when CTRL+clicking on a slider, etc.
     ImGuiColorEditFlags     ColorEditOptions;                   // Store user options for color edit widgets
@@ -1629,6 +1646,9 @@ namespace ImGui
     IMGUI_API ImVec2        ScrollToBringRectIntoView(ImGuiWindow* window, const ImRect& item_rect);
 
     // Basic Accessors
+
+    inline ImGuiItemStatusFlags GetItemStatusFlags() { ImGuiContext& g = *GImGui; return g.LastItemData.StatusFlags; }
+    inline ImGuiItemFlags   GetItemFlags() { ImGuiContext& g = *GImGui; return g.LastItemData.InFlags; }
     inline ImGuiID          GetItemID()     { ImGuiContext& g = *GImGui; return g.CurrentWindow->DC.LastItemId; }
     inline ImGuiID          GetActiveID()   { ImGuiContext& g = *GImGui; return g.ActiveId; }
     inline ImGuiID          GetFocusID()    { ImGuiContext& g = *GImGui; return g.NavId; }

@@ -27,3 +27,15 @@ DWORD  offsetsM::GetPointerAddress(DWORD ptr, std::vector<DWORD> offsets)
     }
 
 }
+void offsetsM::nopBytes(DWORD address, int size)
+{
+
+    DWORD OldProtection;
+    VirtualProtect((LPVOID)address, size + 10, 0x40, &OldProtection);
+    for (int i = 0; i < size; i++)
+    {
+        BYTE* Patched = reinterpret_cast<BYTE*>(address + i);
+        *Patched = 0x90;
+    }
+
+}
